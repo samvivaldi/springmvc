@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<!-- 파일 로그 설정 -->
+	<appender name="fileAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>C:/Temp/logs/springmvc.log</file>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -
+				%msg%n</pattern>
+		</encoder>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>C:/Temp/logs/springmvc.%d{yyyy-MM-dd-HH}.log</fileNamePattern>
+			<!-- 로그 파일을 매 시간마다 생성 -->
+		</rollingPolicy>
+	</appender>
+
+	<!-- 콘솔 로그 설정 -->
+	<appender name="consoleAppender"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -
+				%msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- hello.springmvc 패키지 로그 설정 -->
+	<logger name="hello.springmvc" level="INFO">
+		<appender-ref ref="fileAppender" /> <!-- 파일 로그 참조 -->
+		<appender-ref ref="consoleAppender" /> <!-- 콘솔 로그 참조 -->
+	</logger>
+
+	<!-- 루트 로거 설정 -->
+	<root level="INFO">
+		<appender-ref ref="fileAppender" /> <!-- 파일 로그 참조 -->
+		<appender-ref ref="consoleAppender" /> <!-- 콘솔 로그 참조 -->
+	</root>
+</configuration>
