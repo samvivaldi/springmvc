@@ -29,6 +29,7 @@ public class MappingController {
 	 */
 	@RequestMapping(value = "/mapping-get-v1", method = RequestMethod.GET)
 	public String mappingGetV1() {
+		
 		log.info("mappingGetV1");
 		return "ok";
 	}
