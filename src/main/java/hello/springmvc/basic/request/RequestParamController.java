@@ -1,10 +1,14 @@
 package hello.springmvc.basic.request;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,9 +34,10 @@ public class RequestParamController {
 	}
 
 	@ResponseBody
-	@RequestMapping("/request-param-v1")
-	public String requestParamV2(@RequestParam("username") String memberName, @RequestParam("age") int memberAge) {
-		log.info("username={}, age={}", memberName, memberAge);
+	@RequestMapping("/request-param-v2")
+//	public String requestParamV2(@RequestParam(name = "username", required = false) String memberName, @RequestParam("age") int memberAge, String samName) {
+	public String requestParamV2(@RequestParam(name = "username") String memberName, @RequestParam("age") int memberAge, String samName) {
+		log.info("username={}, age={}, samName={}", memberName, memberAge, samName, samName);
 		return "OK";
 	}
 
@@ -84,6 +89,17 @@ public class RequestParamController {
 		return "ok";
 	}
 
+	@ResponseBody
+	@RequestMapping("/request-params")
+	 public String test(@RequestParam(name="username", defaultValue = "") List<String> usernames, @RequestParam("age") List<Integer> ages) {
+
+		log.info("usernames: {}", usernames);
+		log.info("ages: {}", ages);
+		
+		return "ok";
+		
+	 }	
+	
 	/**
 	 * @RequestParam Map, MultiValueMap Map(key=value) MultiValueMap(key=[value1,
 	 *               value2, ...]) ex) (key=userIds, value=[id1, id2]) 파라미터의 값이 1개가
@@ -96,6 +112,24 @@ public class RequestParamController {
 		return "ok";
 	}
 
+	
+	@ResponseBody
+	@RequestMapping("/request-param-map2")
+	public String requestParamMap2(@RequestParam MultiValueMap<String, String> multiMap) {
+		
+		log.info("multiMap username={}, age={}", multiMap.get("username"), multiMap.get("age"));
+		log.info("MultiValueMap:" + multiMap);
+		
+		
+		List<String> list = multiMap.get("username");
+		list.forEach(val -> { log.info("val = {}" , val); });
+		
+		
+		return "ok";
+	}
+	
+	
+	
 	/**
 	 * @ModelAttribute 사용 참고: model.addAttribute(helloData) 코드도 함께 자동 적용됨, 뒤에 model을
 	 *                 설명할 때 자세히 설명
@@ -104,6 +138,10 @@ public class RequestParamController {
 	@RequestMapping("/model-attribute-v1")
 	public String modelAttributeV1(@ModelAttribute HelloData helloData) {
 		log.info("username={}, age={}", helloData.getUsername(), helloData.getAge());
+		
+//		HelloData helloTest = HelloData.builder().age(10).username("test").build();
+//		log.info("helloTest {}", helloTest);
+		
 		return "ok";
 	}
 
@@ -117,4 +155,22 @@ public class RequestParamController {
 		log.info("username={}, age={}", helloData.getUsername(), helloData.getAge());
 		return "ok";
 	}
+
+	@ResponseBody
+	@RequestMapping("/model-attribute-v3")
+	public HelloData modelAttributeV3(HelloData helloData) {
+		log.info("username={}, age={}", helloData.getUsername(), helloData.getAge());
+		return helloData;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/model-attribute-v4")
+	public List<HelloData> modelAttributeV4(@RequestBody List<HelloData> params) {
+	    log.info("params={}", params);
+	    return params;
+	}
+	
+	
+	
 }
+

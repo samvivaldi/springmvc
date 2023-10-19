@@ -10,6 +10,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,10 +35,10 @@ public class RequestBodyStringController {
 	 * 메시지의 바디에 직접 결과 출력
 	 */
 	@PostMapping("/request-body-string-v2")
-	public void requestBodyStringV2(InputStream inputStream, Writer responseWriter) throws IOException {
+	public void requestBodyStringV2(InputStream inputStream, Writer resWriter) throws IOException {
 		String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
 		log.info("messageBody={}", messageBody);
-		responseWriter.write("ok");
+		resWriter.write("ok");
 	}
 
 	/**
@@ -51,11 +53,26 @@ public class RequestBodyStringController {
 	public HttpEntity<String> requestBodyStringV3(HttpEntity<String> httpEntity) {
 		String messageBody = httpEntity.getBody();
 		HttpHeaders headers = httpEntity.getHeaders();
-		
-		
+
 		log.info("messageBody={}", messageBody);
 		log.info("headers.getLocation()={}", headers.getLocation());
 		log.info("headers.getOrigin()={}", headers.getOrigin());
 		return new HttpEntity<>("ok");
+	}
+
+	/**
+	* @RequestBody
+	* - 메시지 바디 정보를 직접 조회(@RequestParam X, @ModelAttribute X)
+	* - HttpMessageConverter 사용 -> StringHttpMessageConverter 적용
+	*
+	* @ResponseBody
+	* - 메시지 바디 정보 직접 반환(view 조회X)
+	* - HttpMessageConverter 사용 -> StringHttpMessageConverter 적용
+	*/
+	@ResponseBody
+	@PostMapping("/request-body-string-v4")
+	public String requestBodyStringV4(@RequestBody String messageBody) {
+		log.info("messageBody={}", messageBody);
+		return "ok";
 	}
 }

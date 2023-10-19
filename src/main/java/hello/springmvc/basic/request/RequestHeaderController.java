@@ -31,11 +31,16 @@ public class RequestHeaderController {
 		log.info("header host={}", host);
 		log.info("myCookie={}", cookie);
 		
-		MultiValueMap<String, String> map = new LinkedMultiValueMap();
+		MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
 		map.add("keyA", "value1");
 		map.add("keyA", "value2");
 		//[value1,value2]
 		List<String> values = map.get("keyA");
+		
+		log.info("values :" + values);
+		
+		List<String> values2 = map.get("keyNNNN");
+		log.info("values2 :" + values2);
 		
 		return "ok";
 	}
